@@ -18,6 +18,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initRecyclerView()
+        val refreshLayout = findViewById<RefreshLayout>(R.id.refresh)
+        refreshLayout.refreshCallback = object : RefreshLayout.OnRefreshCallback {
+            override fun onRefreshTriggered() {
+                refreshLayout.hideRefreshHeader()
+            }
+        }
     }
 
     private fun initRecyclerView() {
