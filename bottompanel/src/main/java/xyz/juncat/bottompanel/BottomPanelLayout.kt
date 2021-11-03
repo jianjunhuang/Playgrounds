@@ -93,6 +93,11 @@ class BottomPanelLayout : CustomViewGroup {
     ) {
 
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+
+        if (isInEditMode) {
+            showWithAnimate = false
+            itemInvisible = false
+        }
     }
 
     override fun onAttachedToWindow() {
