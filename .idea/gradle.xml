@@ -14,6 +14,8 @@
             <option value="$PROJECT_DIR$/android-kotlin-base" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/bottompanel" />
+            <option value="$PROJECT_DIR$/custom-layoutmanager" />
+            <option value="$PROJECT_DIR$/geniuseffect" />
             <option value="$PROJECT_DIR$/refreshlayout" />
           </set>
         </option>
