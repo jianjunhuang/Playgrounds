@@ -181,7 +181,11 @@ class VerticalLayoutManager : RecyclerView.LayoutManager(),
     ) {
         if (recyclerView == null) return
         if (position !in 0..itemCount) return
-        val linearSmoothScroller = LinearSmoothScroller(recyclerView.context)
+        val linearSmoothScroller = object : LinearSmoothScroller(recyclerView.context) {
+            override fun getVerticalSnapPreference(): Int {
+                return SNAP_TO_START
+            }
+        }
         linearSmoothScroller.targetPosition = position
         startSmoothScroll(linearSmoothScroller)
         //call scrollVerticallyBy
