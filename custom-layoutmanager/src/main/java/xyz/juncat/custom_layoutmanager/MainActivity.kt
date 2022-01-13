@@ -1,5 +1,6 @@
 package xyz.juncat.custom_layoutmanager
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
                 return Holder(TextView(parent.context).apply {
                     layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100)
                     gravity = Gravity.CENTER
+                    setBackgroundColor(Color.parseColor("#f1f1f1"))
                 })
             }
 

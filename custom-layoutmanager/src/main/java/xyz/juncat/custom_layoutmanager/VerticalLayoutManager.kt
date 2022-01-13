@@ -134,7 +134,7 @@ class VerticalLayoutManager : RecyclerView.LayoutManager(),
         if (recycler == null || state == null) return
         if (itemCount <= 0) return
 
-        var itemRemain = height - paddingTop - paddingBottom
+        var itemSpaceRemain = height - paddingTop - paddingBottom
         var itemTop = paddingTop
         var currentPos = 0
         var fixOffset = 0
@@ -150,17 +150,20 @@ class VerticalLayoutManager : RecyclerView.LayoutManager(),
 
         detachAndScrapAttachedViews(recycler)
 
-        while (itemRemain > 0 && currentPos < state.itemCount) {
+        var index = 0
+        while (itemSpaceRemain > 0 && currentPos < state.itemCount) {
             val itemView = recycler.getViewForPosition(currentPos)
             addView(itemView)
-            measureChildWithMargins(itemView, 0, 0)
-            val itemLeft = paddingLeft
+            val marginHorizontal = index * 20
+            measureChildWithMargins(itemView, marginHorizontal, 0)
+            val itemLeft = (width - getDecoratedMeasuredWidth(itemView)) / 2
             val itemRight = itemLeft + getDecoratedMeasuredWidth(itemView)
             val itemBottom = itemTop + getDecoratedMeasuredHeight(itemView)
             layoutDecorated(itemView, itemLeft, itemTop, itemRight, itemBottom)
-            itemRemain -= (itemBottom - itemTop)
+            itemSpaceRemain -= (itemBottom - itemTop)
             itemTop = itemBottom
             currentPos++
+            index++
         }
 
         offsetChildrenVertical(fixOffset)

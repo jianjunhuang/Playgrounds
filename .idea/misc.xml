@@ -3,10 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../../layout/compose-model-1641871488482.xml" value="0.7111913357400722" />
+        <entry key="../../../../../../layout/compose-model-1641871677429.xml" value="0.375" />
+        <entry key="../../../../../../layout/compose-model-1642060658207.xml" value="0.27870370370370373" />
+        <entry key="../../../../../../layout/compose-model-1642067831828.xml" value="0.27870370370370373" />
         <entry key="../../../../../../layout/custom_preview.xml" value="0.30885416666666665" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2368659420289855" />
         <entry key="bottompanel/src/main/res/drawable/bg_panel_layout.xml" value="0.192" />
         <entry key="bottompanel/src/main/res/layout/activity_main.xml" value="0.2368659420289855" />
+        <entry key="compose-demo/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2814814814814815" />
         <entry key="custom-layoutmanager/src/main/res/layout/activity_main.xml" value="0.2368659420289855" />
         <entry key="geniuseffect/src/main/res/layout/activity_main.xml" value="0.2368659420289855" />
         <entry key="refreshlayout/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1725" />
