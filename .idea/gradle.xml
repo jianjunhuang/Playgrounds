@@ -18,6 +18,7 @@
             <option value="$PROJECT_DIR$/custom-layoutmanager" />
             <option value="$PROJECT_DIR$/geniuseffect" />
             <option value="$PROJECT_DIR$/refreshlayout" />
+            <option value="$PROJECT_DIR$/scale-gesture" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
