@@ -24,6 +24,10 @@ class ScaleGestureImageView : AppCompatImageView {
                 distanceX: Float,
                 distanceY: Float
             ): Boolean {
+                if (!isPointInImage(e1?.x ?: 0f, e1?.y ?: 0f)
+                    && !isPointInImage(e2?.x ?: 0f, e2?.y ?: 0f)
+                ) return false
+
                 val scale = getScale()
                 val rect = getDrawRectF()
                 var dx = -distanceX / scale
@@ -66,12 +70,13 @@ class ScaleGestureImageView : AppCompatImageView {
     private val scaleGestureDetector =
         ScaleGestureDetector(context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
             override fun onScale(detector: ScaleGestureDetector?): Boolean {
+                if (detector == null) return false
                 if (initScale == -1f) {
                     initScale = getScale()
                 }
-                val scale = detector?.scaleFactor ?: 1f
-                val fx = detector?.focusX ?: 0f
-                val fy = detector?.focusY ?: 0f
+                val scale = detector.scaleFactor
+                val fx = detector.focusX
+                val fy = detector.focusY
                 imageMatrix.invert(invertMatrix)
                 pointArray[0] = fx
                 pointArray[1] = fy
@@ -91,6 +96,11 @@ class ScaleGestureImageView : AppCompatImageView {
                 imageMatrix.preScale(realScale, realScale, pointArray[0], pointArray[1])
                 invalidate()
                 return true
+            }
+
+            override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
+                if (detector == null) return false
+                return isPointInImage(detector.focusX, detector.focusY)
             }
         })
 
@@ -146,5 +156,9 @@ class ScaleGestureImageView : AppCompatImageView {
 
     private fun resetInitScale() {
         initScale = -1f
+    }
+
+    private fun isPointInImage(x: Float, y: Float): Boolean {
+        return getDrawRectF().contains(x, y)
     }
 }
