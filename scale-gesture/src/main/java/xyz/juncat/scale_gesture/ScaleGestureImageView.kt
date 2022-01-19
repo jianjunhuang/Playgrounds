@@ -29,37 +29,32 @@ class ScaleGestureImageView : AppCompatImageView {
                 ) return false
 
                 val scale = getScale()
-                val rect = getDrawRectF()
                 var dx = -distanceX / scale
                 var dy = -distanceY / scale
-                dx = if (rect.width() <= width) {
-                    when {
-                        rect.left + dx < 0 -> -rect.left
-                        rect.right + dx > width -> width - rect.right
-                        else -> dx
-                    }
-                } else {
-                    when {
-                        rect.left + dx > 0 -> -rect.left
-                        rect.right + dx < width -> width - rect.right
-                        else -> dx
-                    }
-                }
-
-                dy = if (rect.height() <= height) {
-                    when {
-                        rect.top + dy < 0 -> -rect.top
-                        rect.bottom + dy > height -> height - rect.bottom
-                        else -> dy
-                    }
-                } else {
-                    when {
-                        rect.top + dy > 0 -> rect.top
-                        rect.bottom + dy < height -> rect.bottom
-                        else -> dy
-                    }
-                }
+                dx = getFixedDistanceX(dx)
+                dy = getFixedDistanceY(dy)
                 imageMatrix.preTranslate(dx, dy)
+                invalidate()
+                return true
+            }
+
+            override fun onDoubleTap(e: MotionEvent?): Boolean {
+                if (e == null || !isPointInImage(e.x, e.y)) return false
+                if (initScale == -1f) {
+                    initScale = getScale()
+                }
+                val curScale = getScale()
+                val max = maxScale * initScale
+                val scale = if (curScale != initScale) {
+                    initScale / curScale
+                } else {
+                    max / curScale
+                }
+                val focusPoint = getCanvasPoint(e.x, e.y)
+                imageMatrix.preScale(scale, scale, focusPoint[0], focusPoint[1])
+                val dx = getFixedDistanceX(0f)
+                val dy = getFixedDistanceY(0f)
+                imageMatrix.postTranslate(dx, dy)
                 invalidate()
                 return true
             }
@@ -77,11 +72,7 @@ class ScaleGestureImageView : AppCompatImageView {
                 val scale = detector.scaleFactor
                 val fx = detector.focusX
                 val fy = detector.focusY
-                imageMatrix.invert(invertMatrix)
-                pointArray[0] = fx
-                pointArray[1] = fy
-                invertMatrix.mapPoints(pointArray)
-
+                val focusPoint = getCanvasPoint(fx, fy)
                 val curScale = getScale()
                 val theoryScale = curScale * scale
                 val max = maxScale * initScale
@@ -93,7 +84,7 @@ class ScaleGestureImageView : AppCompatImageView {
                 } else {
                     scale
                 }
-                imageMatrix.preScale(realScale, realScale, pointArray[0], pointArray[1])
+                imageMatrix.preScale(realScale, realScale, focusPoint[0], focusPoint[1])
                 invalidate()
                 return true
             }
@@ -145,8 +136,8 @@ class ScaleGestureImageView : AppCompatImageView {
 
     companion object {
         private const val TAG = "ScaleGestureImageView"
-        val MAX_SCALE = 2.0f //最大缩放比例
-        val MIN_SCALE = 0.5f // 最小缩放比例
+        val MAX_SCALE = 2.0f
+        val MIN_SCALE = 0.5f
     }
 
     override fun setImageDrawable(drawable: Drawable?) {
@@ -161,4 +152,50 @@ class ScaleGestureImageView : AppCompatImageView {
     private fun isPointInImage(x: Float, y: Float): Boolean {
         return getDrawRectF().contains(x, y)
     }
+
+    private fun getCanvasPoint(x: Float, y: Float): FloatArray {
+        imageMatrix.invert(invertMatrix)
+        pointArray[0] = x
+        pointArray[1] = y
+        invertMatrix.mapPoints(pointArray)
+        return pointArray
+    }
+
+    private fun getFixedDistanceX(dx: Float): Float {
+        val rect = getDrawRectF()
+        val rdx = if (rect.width() <= width) {
+            when {
+                rect.left + dx < 0 -> -rect.left
+                rect.right + dx > width -> width - rect.right
+                else -> dx
+            }
+        } else {
+            when {
+                rect.left + dx > 0 -> -rect.left
+                rect.right + dx < width -> width - rect.right
+                else -> dx
+            }
+        }
+        return rdx
+    }
+
+    private fun getFixedDistanceY(dy: Float): Float {
+        val rect = getDrawRectF()
+        val rdy = if (rect.height() <= height) {
+            when {
+                rect.top + dy < 0 -> -rect.top
+                rect.bottom + dy > height -> height - rect.bottom
+                else -> dy
+            }
+        } else {
+            when {
+                rect.top + dy > 0 -> rect.top
+                rect.bottom + dy < height -> rect.bottom
+                else -> dy
+            }
+        }
+        return rdy
+    }
+
+
 }
