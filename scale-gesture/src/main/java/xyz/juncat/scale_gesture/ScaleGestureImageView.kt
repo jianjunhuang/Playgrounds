@@ -117,21 +117,10 @@ class ScaleGestureImageView : AppCompatImageView {
         return values[Matrix.MSCALE_X]
     }
 
-    private val borderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        style = Paint.Style.STROKE
-        strokeWidth = 30f
-        color = Color.RED
-    }
-
     private fun getDrawRectF(): RectF {
         drawableRectF.set(drawable.bounds)
         imageMatrix.mapRect(drawableRectF)
         return drawableRectF
-    }
-
-    override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
-        canvas?.drawRect(getDrawRectF(), borderPaint)
     }
 
     companion object {
