@@ -16,6 +16,8 @@ class ScaleGestureImageView : AppCompatImageView {
     private var initScale = -1f
     var maxScale = MAX_SCALE
     var minScale = MIN_SCALE
+
+    private var isScrolling = false
     private val gestureDetector =
         GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
             override fun onScroll(
@@ -34,6 +36,7 @@ class ScaleGestureImageView : AppCompatImageView {
                 dx = getFixedDistanceX(dx)
                 dy = getFixedDistanceY(dy)
                 imageMatrix.preTranslate(dx, dy)
+                Log.i(TAG, "onScroll: $dx, $dy")
                 invalidate()
                 return true
             }
@@ -86,12 +89,20 @@ class ScaleGestureImageView : AppCompatImageView {
                 }
                 imageMatrix.preScale(realScale, realScale, focusPoint[0], focusPoint[1])
                 invalidate()
+                Log.i(TAG, "onScale: $scale")
                 return true
             }
 
             override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
                 if (detector == null) return false
-                return isPointInImage(detector.focusX, detector.focusY)
+                val inImage = isPointInImage(detector.focusX, detector.focusY)
+                if (inImage) isScrolling = true
+                return inImage
+            }
+
+            override fun onScaleEnd(detector: ScaleGestureDetector?) {
+                super.onScaleEnd(detector)
+                isScrolling = false
             }
         })
 
@@ -178,8 +189,8 @@ class ScaleGestureImageView : AppCompatImageView {
             }
         } else {
             when {
-                rect.top + dy > 0 -> rect.top
-                rect.bottom + dy < height -> rect.bottom
+                rect.top + dy > 0 -> -rect.top
+                rect.bottom + dy < height -> height - rect.bottom
                 else -> dy
             }
         }
