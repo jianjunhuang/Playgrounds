@@ -18,6 +18,8 @@
             <option value="$PROJECT_DIR$/custom-layoutmanager" />
             <option value="$PROJECT_DIR$/databinding" />
             <option value="$PROJECT_DIR$/geniuseffect" />
+            <option value="$PROJECT_DIR$/indicatorview" />
+            <option value="$PROJECT_DIR$/indicatorview/indicator" />
             <option value="$PROJECT_DIR$/refreshlayout" />
             <option value="$PROJECT_DIR$/scale-gesture" />
           </set>
