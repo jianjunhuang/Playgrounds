@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
 //                    }
 //                }
 //            }
-//            compositionLocalTest()
+            compositionLocalTest()
         }
     }
 }
@@ -130,6 +130,13 @@ fun HelloScreen() {
 }
 
 
+private val CustomLocal = compositionLocalOf {
+    "test1"
+}
+private val CustomStaticLocal = staticCompositionLocalOf {
+    "static test"
+}
+
 @Composable
 private fun compositionLocalTest() {
     MaterialTheme {
@@ -143,10 +150,30 @@ private fun compositionLocalTest() {
                 ) {
 //                    LocalContext.current.resources.getQuantityString()
                     Text("ContentAlpha = high, ContentColor = Green")
+
+                    val txt = "test1"
+                    CompositionLocalProvider(CustomLocal provides txt) {
+                        customCompositionLocalTest()
+                        CompositionLocalProvider(CustomLocal provides "hh") {
+                            customCompositionLocalTest()
+                        }
+                    }
+
+                    CompositionLocalProvider(CustomStaticLocal provides "static 1") {
+                        Text(CustomStaticLocal.current)
+                    }
+                    CompositionLocalProvider(CustomStaticLocal provides "static 2") {
+                        Text(CustomStaticLocal.current)
+                    }
                 }
             }
         }
     }
+}
+
+@Composable
+private fun customCompositionLocalTest() {
+    Text(CustomLocal.current)
 }
 
 @Composable
